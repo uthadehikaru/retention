@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\PostResource;
 use App\Filament\Resources\UserResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -63,7 +62,6 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-home')
                     ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
                     ->url(fn (): string => Dashboard::getUrl()),
-                    ...PostResource::getNavigationItems(),
                     ...UserResource::getNavigationItems(),
                     NavigationItem::make('Logs')
                         ->icon('heroicon-o-adjustments-horizontal')

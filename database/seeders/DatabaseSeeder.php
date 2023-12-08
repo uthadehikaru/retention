@@ -13,15 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::firstOrCreate([ 
-            'email' => 'admin@laravel.test',
-        ],[
-            'name' => 'Admin',
-            'password' => Hash::make('secret'),
-        ]);
+        // \App\Models\User::factory(10)->create();
 
-        $this->call([
-            PostSeeder::class,
+        \App\Models\User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@laravel.test',
+            'password' => Hash::make('secret'),
         ]);
     }
 }
