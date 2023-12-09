@@ -22,7 +22,7 @@ class AgentSeeder extends Seeder
             return [
                 'name' => $user->name,
             ];
-        }))->create(['role'=>'agent','name'=>'Agent','email'=>'agent@laravel.test']);
+        }))->create(['role'=>'agent','name'=>'Agent','email'=>'agent@retention.test']);
 
         User::factory(10)->has(Agent::factory()
             ->has(Customer::factory(5))

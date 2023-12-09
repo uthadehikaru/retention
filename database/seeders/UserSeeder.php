@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::firstOrCreate([
-            'email' => 'admin@laravel.test',
+            'email' => 'admin@retention.test',
         ],[
             'name' => 'Admin',
             'password' => Hash::make('secret'),
