@@ -56,19 +56,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
-                return $builder->items([
-                    NavigationItem::make('Dashboard')
-                    ->icon('heroicon-o-home')
-                    ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
-                    ->url(fn (): string => Dashboard::getUrl()),
-                    ...UserResource::getNavigationItems(),
-                    NavigationItem::make('Logs')
-                        ->icon('heroicon-o-adjustments-horizontal')
-                        ->isActiveWhen(fn (): bool => request()->is('logs'))
-                        ->url('logs'),
-                ]);
-            })
             ;
     }
 }

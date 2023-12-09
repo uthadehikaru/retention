@@ -13,12 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@laravel.test',
-            'password' => Hash::make('secret'),
+        $this->call([
+            UserSeeder::class,
+            AgentSeeder::class,
         ]);
     }
 }

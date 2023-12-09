@@ -9,10 +9,8 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
+class AgentFactory extends Factory
 {
-    protected static ?string $password;
-
     /**
      * Define the model's default state.
      *
@@ -22,11 +20,10 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('secret'),
-            'remember_token' => Str::random(10),
-            'role' => 'agent',
+            'nik' => fake()->unique()->numerify('################'),
+            'join_date' => fake()->date(),
+            'resign_date' => null,
+            'user_id' => null,
         ];
     }
 
