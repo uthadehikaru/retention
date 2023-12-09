@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', 'admin');
-Route::redirect('/login', 'admin/login')->name('login');
+Route::redirect('/', 'agent');
+Route::redirect('/login', 'agent/login')->name('login');
 
 Route::middleware('auth')->group(function() {
     Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

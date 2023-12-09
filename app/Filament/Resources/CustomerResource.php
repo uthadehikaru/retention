@@ -2,44 +2,48 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AgentResource\Pages;
-use App\Filament\Resources\AgentResource\RelationManagers;
-use App\Models\Agent;
-use App\Models\User;
+use App\Filament\Resources\CustomerResource\Pages;
+use App\Filament\Resources\CustomerResource\RelationManagers;
+use App\Models\Customer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Hash;
 
-class AgentResource extends Resource
+class CustomerResource extends Resource
 {
-    protected static ?string $model = Agent::class;
+    protected static ?string $model = Customer::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
-    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nik')
+                Forms\Components\TextInput::make('agent_id')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('billing_account')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('customer_id')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('join_date')
-                    ->required(),
-                Forms\Components\DatePicker::make('resign_date'),
+                Forms\Components\TextInput::make('hp')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('outstanding')
+                    ->maxLength(255),
             ]);
     }
 
@@ -47,6 +51,8 @@ class AgentResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('agent.name')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -55,20 +61,20 @@ class AgentResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('nik')
+                Tables\Columns\TextColumn::make('billing_account')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('customer_id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user.email')
-                    ->label('Email')
+                Tables\Columns\TextColumn::make('hp')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('join_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('resign_date')
-                    ->date()
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('outstanding')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -93,9 +99,9 @@ class AgentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAgents::route('/'),
-            'create' => Pages\CreateAgent::route('/create'),
-            'edit' => Pages\EditAgent::route('/{record}/edit'),
+            'index' => Pages\ListCustomers::route('/'),
+            'create' => Pages\CreateCustomer::route('/create'),
+            'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
     }
 }
