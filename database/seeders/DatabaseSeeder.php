@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             AgentSeeder::class,
             InvoiceSeeder::class,
             PaymentSeeder::class,
+            ContactSeeder::class,
         ]);
     }
 }

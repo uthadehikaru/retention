@@ -20,4 +20,9 @@ class Invoice extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function contacts():HasMany
+    {
+        return $this->hasMany(Contact::class);
+    }
 }
