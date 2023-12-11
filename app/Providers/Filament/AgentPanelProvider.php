@@ -26,6 +26,7 @@ class AgentPanelProvider extends PanelProvider
             ->id('agent')
             ->path('agent')
             ->login()
+            ->darkMode(false)
             ->colors([
                 'primary' => Color::Amber,
             ])

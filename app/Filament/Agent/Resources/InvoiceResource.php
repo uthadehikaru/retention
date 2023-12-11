@@ -2,47 +2,41 @@
 
 namespace App\Filament\Agent\Resources;
 
-use App\Filament\Agent\Resources\CustomerResource\Pages;
-use App\Filament\Agent\Resources\CustomerResource\RelationManagers;
-use App\Models\Customer;
+use App\Filament\Agent\Resources\InvoiceResource\Pages;
+use App\Filament\Agent\Resources\InvoiceResource\RelationManagers;
+use App\Models\Invoice;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerResource extends Resource
+class InvoiceResource extends Resource
 {
-    protected static ?string $model = Customer::class;
+    protected static ?string $model = Invoice::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('billing_account')
+                Forms\Components\Select::make('customer_id')
+                    ->relationship('customer', 'name')
+                    ->required(),
+                Forms\Components\TextInput::make('invoice_no')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('customer_id')
+                Forms\Components\DatePicker::make('invoice_date')
+                    ->required(),
+                Forms\Components\TextInput::make('total_amount')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('hp')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('outstanding')
-                    ->maxLength(255),
+                    ->numeric(),
+                Forms\Components\DatePicker::make('suspend_date'),
+                Forms\Components\DatePicker::make('terminate_date'),
             ]);
     }
 
@@ -53,6 +47,9 @@ class CustomerResource extends Resource
                 '#',
             )
             ->columns([
+                Tables\Columns\TextColumn::make('customer.name')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -61,19 +58,21 @@ class CustomerResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('billing_account')
+                Tables\Columns\TextColumn::make('invoice_no')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('customer_id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('hp')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
+                Tables\Columns\TextColumn::make('invoice_date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total_amount')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('suspend_date')
+                    ->date()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('outstanding')
-                    ->searchable()
+                Tables\Columns\TextColumn::make('terminate_date')
+                    ->date()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
@@ -99,14 +98,14 @@ class CustomerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCustomers::route('/'),
-            'create' => Pages\CreateCustomer::route('/create'),
-            'edit' => Pages\EditCustomer::route('/{record}/edit'),
+            'index' => Pages\ListInvoices::route('/'),
+            'create' => Pages\CreateInvoice::route('/create'),
+            'edit' => Pages\EditInvoice::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('agent_id', Auth::user()->agent?->id);
+        return parent::getEloquentQuery()->whereRelation('customer', 'agent_id', Auth::user()->agent?->id);
     }
 }

@@ -21,7 +21,7 @@ class CustomerPolicy
      */
     public function view(User $user, Customer $customer): bool
     {
-        return true;
+        return $user->is_admin || $user->agent?->id === $customer->agent_id;
     }
 
     /**
@@ -29,7 +29,7 @@ class CustomerPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
@@ -37,7 +37,7 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
@@ -45,7 +45,7 @@ class CustomerPolicy
      */
     public function delete(User $user, Customer $customer): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
@@ -53,7 +53,7 @@ class CustomerPolicy
      */
     public function restore(User $user, Customer $customer): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
@@ -61,6 +61,6 @@ class CustomerPolicy
      */
     public function forceDelete(User $user, Customer $customer): bool
     {
-        return true;
+        return $user->is_admin;
     }
 }

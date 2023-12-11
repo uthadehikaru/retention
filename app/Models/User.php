@@ -50,6 +50,11 @@ class User extends Authenticatable implements FilamentUser
 
     }
 
+    public function getIsAdminAttribute():bool
+    {
+        return $this->role === 'admin';
+    }
+
     public function agent():HasOne
     {
         return $this->hasOne(Agent::class);
