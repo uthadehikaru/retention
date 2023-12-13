@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Invoice;
+use App\Models\InvoiceAgent;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ return new class extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(Invoice::class)->constrained();
+            $table->foreignIdFor(InvoiceAgent::class)->constrained();
             $table->timestamp('call_time');
             $table->string('call_type');
             $table->string('call_result');

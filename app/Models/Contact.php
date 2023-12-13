@@ -28,8 +28,8 @@ class Contact extends Model
         self::CALL_RESULT_DELIVERED,
     ];
 
-    public function invoice():BelongsTo
+    public function invoiceAgent():BelongsTo
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(InvoiceAgent::class);
     }
 }

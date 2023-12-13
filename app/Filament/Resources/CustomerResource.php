@@ -23,9 +23,6 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('agent_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('billing_account')
                     ->required()
                     ->maxLength(255),
@@ -51,8 +48,6 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('agent.name')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

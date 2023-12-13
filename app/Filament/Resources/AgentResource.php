@@ -40,6 +40,11 @@ class AgentResource extends Resource
                 Forms\Components\DatePicker::make('join_date')
                     ->required(),
                 Forms\Components\DatePicker::make('resign_date'),
+                Forms\Components\Select::make('user_id')
+                    ->label('Email')
+                    ->relationship(name: 'user', titleAttribute: 'email')
+                    ->disabled()
+                    ->hiddenOn('create'),
             ]);
     }
 

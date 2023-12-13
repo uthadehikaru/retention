@@ -11,11 +11,6 @@ class Customer extends Model
 {
     use HasFactory;
 
-    public function agent():BelongsTo
-    {
-        return $this->belongsTo(Agent::class);
-    }
-
     public function invoices():HasMany
     {
         return $this->hasMany(Invoice::class);

@@ -21,7 +21,7 @@ class ContactPolicy
      */
     public function view(User $user, Contact $contact): bool
     {
-        return $user->is_admin || $user->agent?->id === $contact->invoice->agent_id;
+        return $user->is_admin || $user->agent?->id === $contact->invoiceAgent->agent_id;
     }
 
     /**
@@ -37,7 +37,7 @@ class ContactPolicy
      */
     public function update(User $user, Contact $contact): bool
     {
-        return $user->is_admin || $user->agent?->id === $contact->invoice->agent_id;
+        return $user->is_admin || $user->agent?->id === $contact->invoiceAgent->agent_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class ContactPolicy
      */
     public function delete(User $user, Contact $contact): bool
     {
-        return $user->is_admin || $user->agent?->id === $contact->invoice->agent_id;
+        return $user->is_admin || $user->agent?->id === $contact->invoiceAgent->agent_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class ContactPolicy
      */
     public function restore(User $user, Contact $contact): bool
     {
-        return $user->is_admin || $user->agent?->id === $contact->invoice->agent_id;
+        return $user->is_admin || $user->agent?->id === $contact->invoiceAgent->agent_id;
     }
 
     /**
@@ -61,6 +61,6 @@ class ContactPolicy
      */
     public function forceDelete(User $user, Contact $contact): bool
     {
-        return $user->is_admin || $user->agent?->id === $contact->invoice->agent_id;
+        return $user->is_admin || $user->agent?->id === $contact->invoiceAgent->agent_id;
     }
 }

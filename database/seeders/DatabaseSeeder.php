@@ -14,9 +14,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             AgentSeeder::class,
-            InvoiceSeeder::class,
+            CustomerSeeder::class,
             PaymentSeeder::class,
-            ContactSeeder::class,
+            InvoiceAgentSeeder::class,
         ]);
     }
 }

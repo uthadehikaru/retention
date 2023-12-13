@@ -17,7 +17,6 @@ class AgentSeeder extends Seeder
     public function run(): void
     {
         User::factory()->has(Agent::factory()
-            ->has(Customer::factory(10))
             ->state(function(array $attributes, User $user){
             return [
                 'name' => $user->name,
@@ -25,7 +24,6 @@ class AgentSeeder extends Seeder
         }))->create(['role'=>'agent','name'=>'Agent','email'=>'agent@retention.test']);
 
         User::factory(10)->has(Agent::factory()
-            ->has(Customer::factory(5))
             ->state(function(array $attributes, User $user){
             return [
                 'name' => $user->name,

@@ -23,7 +23,6 @@ class CustomerFactory extends Factory
             'hp' => fake()->e164PhoneNumber(),
             'email' => fake()->unique()->safeEmail(),
             'outstanding' => '',
-            'agent_id' => null,
         ];
     }
 }

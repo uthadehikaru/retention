@@ -47,7 +47,9 @@ class ContactResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('invoice.invoice_no')
+                Tables\Columns\TextColumn::make('invoiceAgent.invoice.invoice_no')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('invoiceAgent.agent.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

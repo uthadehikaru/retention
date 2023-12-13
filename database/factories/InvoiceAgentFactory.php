@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
  */
-class ContactFactory extends Factory
+class InvoiceAgentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,12 +18,10 @@ class ContactFactory extends Factory
     public function definition(): array
     {
         return [
-            'invoice_agent_id' => 0,
-            'call_time' => fake()->dateTimeThisMonth(),
-            'call_type' => fake()->randomElement(Contact::CALL_TYPE),
-            'call_result' => fake()->randomElement(Contact::CALL_RESULT),
-            'detail' => fake()->sentence(),
-            'notes' => fake()->sentence(),
+            'invoice_id'=>0,
+            'agent_id'=>0,
+            'start_date' => fake()->dateTimeThisYear(),
+            'end_date' => fake()->dateTimeThisYear(),
         ];
     }
 }
