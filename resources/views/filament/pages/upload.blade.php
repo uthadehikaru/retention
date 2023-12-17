@@ -1,6 +1,17 @@
 <x-filament-panels::page>
     <form wire:submit="submit">
         <div class="relative mb-4">
+            <label for="data" class="leading-7 text-sm text-gray-600">Data</label>
+            <select id="data" name="data" wire:model="data"
+            wire:loading.attr="disabled"
+            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                <option value="agent">Agent</option>
+                <option value="customer">Customer</option>
+                <option value="invoice">Invoice</option>
+                <option value="payment">Payment</option>
+            </select>
+        </div>
+        <div class="relative mb-4">
             <label for="file" class="leading-7 text-sm text-gray-600">File</label>
             <input type="file" id="file" name="file" wire:model="file"
             wire:loading.attr="disabled"

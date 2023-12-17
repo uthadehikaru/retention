@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ContactResource extends Resource
 {
@@ -23,17 +24,22 @@ class ContactResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('invoice_id')
-                    ->relationship('invoice', 'id')
+                Forms\Components\Select::make('invoice_agent_id')
+                    ->label('Invoice')
+                    ->relationship('invoiceAgent', 'invoices.invoice_no', function($query){
+                        $query->join('invoices','invoices.id','invoice_agents.invoice_id');
+                        if(Auth::user()->agent)
+                            $query->where('agent_id',Auth::user()->agent->id);
+                    })
                     ->required(),
                 Forms\Components\DateTimePicker::make('call_time')
                     ->required(),
-                Forms\Components\TextInput::make('call_type')
+                Forms\Components\Select::make('call_type')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('call_result')
+                    ->options(Contact::CALL_TYPE),
+                Forms\Components\Select::make('call_result')
                     ->required()
-                    ->maxLength(255),
+                    ->options(Contact::CALL_RESULT),
                 Forms\Components\Textarea::make('detail')
                     ->maxLength(65535)
                     ->columnSpanFull(),

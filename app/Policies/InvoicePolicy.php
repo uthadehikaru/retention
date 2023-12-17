@@ -21,7 +21,7 @@ class InvoicePolicy
      */
     public function view(User $user, Invoice $invoice): bool
     {
-        return $user->is_admin || $user->agent?->id === $invoice->customer->agent_id;
+        return $user->is_admin || $invoice->agents()->where('agents.id',$user->agent?->id)->exists();
     }
 
     /**

@@ -14,8 +14,8 @@ class Contact extends Model
     public const CALL_TYPE_WHATSAPP = "whatsapp";
 
     const CALL_TYPE = [
-        self::CALL_TYPE_PHONE,
-        self::CALL_TYPE_WHATSAPP,
+        'phone' => self::CALL_TYPE_PHONE,
+        'whatsapp' => self::CALL_TYPE_WHATSAPP,
     ];
 
     public const CALL_RESULT_CONTACTED = "contacted";
@@ -23,9 +23,9 @@ class Contact extends Model
     public const CALL_RESULT_DELIVERED = "delivered";
 
     const CALL_RESULT = [
-        self::CALL_RESULT_CONTACTED,
-        self::CALL_RESULT_UNCONTACTED,
-        self::CALL_RESULT_DELIVERED,
+        'contacted' => self::CALL_RESULT_CONTACTED,
+        'uncontacted' => self::CALL_RESULT_UNCONTACTED,
+        'delivered' => self::CALL_RESULT_DELIVERED,
     ];
 
     public function invoiceAgent():BelongsTo

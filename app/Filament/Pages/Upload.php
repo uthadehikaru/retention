@@ -3,6 +3,9 @@
 namespace App\Filament\Pages;
 
 use App\Imports\AgentImport;
+use App\Imports\CustomerImport;
+use App\Imports\InvoiceImport;
+use App\Imports\PaymentImport;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Livewire\WithFileUploads;
@@ -13,6 +16,7 @@ class Upload extends Page
     use WithFileUploads;
  
     public $file;
+    public $data = 'agent';
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
@@ -34,7 +38,22 @@ class Upload extends Page
         }
 
         $path = $this->file->store('uploads');
-        Excel::import(new AgentImport, $path);
+        if($this->data==='agent')
+            Excel::import(new AgentImport, $path);
+        elseif($this->data==='customer')
+            Excel::import(new CustomerImport, $path);
+        elseif($this->data==='invoice')
+            Excel::import(new InvoiceImport, $path);
+        elseif($this->data==='payment')
+            Excel::import(new PaymentImport, $path);
+        else{
+            Notification::make()
+                ->title('Data '.$this->data.' not supported')
+                ->danger()
+                ->send();
+            return;
+        }
+
         Notification::make()
             ->title('Uploaded')
             ->success()

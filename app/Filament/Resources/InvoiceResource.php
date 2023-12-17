@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceResource extends Resource
 {
@@ -23,9 +24,8 @@ class InvoiceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('customer_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\TextInput::make('customer.name')
+                    ->required(),
                 Forms\Components\TextInput::make('invoice_no')
                     ->required()
                     ->maxLength(255),
@@ -76,12 +76,17 @@ class InvoiceResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function (Builder $query) {
+                if(Auth::user()->agent)
+                    $query->whereRelation('agents','agents.id',Auth::user()->agent->id);
+            });
     }
 
     public static function getRelations(): array

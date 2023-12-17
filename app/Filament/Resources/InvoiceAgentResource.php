@@ -23,12 +23,12 @@ class InvoiceAgentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('invoice_id')
+                Forms\Components\Select::make('invoice_id')
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('agent_id')
+                    ->relationship('invoice','invoice_no'),
+                Forms\Components\Select::make('agent_id')
                     ->required()
-                    ->numeric(),
+                    ->relationship('agent','name'),
                 Forms\Components\DatePicker::make('start_date')
                     ->required(),
                 Forms\Components\DatePicker::make('end_date')
@@ -65,6 +65,7 @@ class InvoiceAgentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
