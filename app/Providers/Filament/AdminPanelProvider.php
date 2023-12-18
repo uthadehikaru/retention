@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\AgentResource\Widgets\AgentStat;
 use App\Filament\Resources\InvoiceAgentResource\Widgets\RandomInvoice;
+use App\Filament\Resources\InvoiceResource\Widgets\AgentInvoiceStat;
 use App\Filament\Resources\InvoiceResource\Widgets\InvoiceStat;
 use App\Filament\Resources\UserResource;
 use Filament\Http\Middleware\Authenticate;
@@ -51,6 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AgentStat::class,
                 InvoiceStat::class,
+                AgentInvoiceStat::class,
                 RandomInvoice::class,
             ])
             ->middleware([

@@ -7,6 +7,8 @@ use App\Filament\Resources\InvoiceResource\RelationManagers;
 use App\Models\Invoice;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,11 +22,34 @@ class InvoiceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make('customer.name')->label('Customer Name'),
+                TextEntry::make('customer.hp')->label('Customer Phone'),
+                TextEntry::make('invoice_no'),
+                TextEntry::make('invoice_date')
+                ->state(function (Invoice $invoice) {
+                    return $invoice->invoice_date?->format('d M Y');
+                }),
+                TextEntry::make('total_amount')
+                ->state(function (Invoice $invoice) {
+                    return number_format($invoice->total_amount, 0, ",", ".");
+                })
+                ->columnSpanFull(),
+                TextEntry::make('suspend_date')->default('-'),
+                TextEntry::make('terminate_date')->default('-'),
+            ]);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('customer.name')
+                Forms\Components\Select::make('customer_id')
+                    ->label('Customer Name')
+                    ->relationship('customer','name')
                     ->required(),
                 Forms\Components\TextInput::make('invoice_no')
                     ->required()

@@ -13,6 +13,12 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'invoice_date' => 'date',
+        'suspend_date' => 'date',
+        'terminate_date' => 'date',
+    ];
+
     public function scopeUnpaid($query)
     {
         return $query->doesntHave('payments');

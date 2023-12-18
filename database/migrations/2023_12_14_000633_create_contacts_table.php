@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(InvoiceAgent::class)->constrained();
-            $table->timestamp('call_time');
+            $table->timestamp('call_time')->nullable();
             $table->string('call_type');
             $table->string('call_result');
             $table->text('detail')->nullable();
