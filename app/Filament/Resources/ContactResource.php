@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Resources\ContactResource\RelationManagers;
 use App\Models\Contact;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,8 +29,11 @@ class ContactResource extends Resource
                     ->label('Invoice')
                     ->relationship('invoiceAgent', 'invoices.invoice_no', function($query){
                         $query->join('invoices','invoices.id','invoice_agents.invoice_id');
-                        if(Auth::user()->agent)
-                            $query->where('agent_id',Auth::user()->agent->id);
+                        if(Auth::user()->agent){
+                            $query->where('agent_id',Auth::user()->agent->id)
+                            ->whereDate('start_date','<=',Carbon::now())
+                            ->whereDate('end_date','>=',Carbon::now());
+                        }
                     })
                     ->required(),
                 Forms\Components\DateTimePicker::make('call_time')

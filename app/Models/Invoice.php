@@ -13,6 +13,26 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    public function scopeUnpaid($query)
+    {
+        return $query->doesntHave('payments');
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->whereHas('payments');
+    }
+
+    public function scopeSuspended($query)
+    {
+        return $query->whereNotNull('suspend_date');
+    }
+
+    public function scopeTerminated($query)
+    {
+        return $query->whereNotNull('terminate_date');
+    }
+
     public function customer():BelongsTo
     {
         return $this->belongsTo(Customer::class);

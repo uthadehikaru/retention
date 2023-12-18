@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PaymentResource\Pages;
 use App\Filament\Resources\PaymentResource\RelationManagers;
 use App\Models\Payment;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,13 +24,16 @@ class PaymentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('invoice_id')
+                Forms\Components\Select::make('invoice_id')
                     ->required()
-                    ->numeric(),
+                    ->relationship('invoice','invoice_no', fn ($query) => $query->unpaid())
+                    ->hiddenOn('edit'),
                 Forms\Components\TextInput::make('amount')
                     ->required()
+                    ->default(0)
                     ->numeric(),
                 Forms\Components\DatePicker::make('payment_date')
+                ->default(Carbon::now()->format('Y-m-d'))
                     ->required(),
             ]);
     }
@@ -48,12 +52,12 @@ class PaymentResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('payment_date')
+                    ->date()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric(0, ",", ".")
                     ->alignRight()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('payment_date')
-                    ->date()
                     ->sortable(),
             ])
             ->filters([
