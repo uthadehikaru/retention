@@ -28,6 +28,25 @@ class Contact extends Model
         'delivered' => self::CALL_RESULT_DELIVERED,
     ];
 
+    const CALL_RESPONSE_CONTACTED = [
+        'Masalah Keuangan' => "Masalah Keuangan",
+        'Pindah Rumah' => 'Pindah Rumah',
+        'Janji Bayar' => 'Janji Bayar',
+        'Internet Lambat' => 'Internet Lambat',
+        'Internet Sering Mati' => 'Internet Sering Mati',
+        'Sales tidak menepati janji' => 'Sales tidak menepati janji',
+        'Pembayaran Susah' => 'Pembayaran Susah',
+        'Move to Competitor' => 'Move to Competitor',
+        'Perbaikan Lama' => 'Perbaikan Lama',
+    ];
+
+    const CALL_RESPONSE_UNCONTACTED = [
+        'RNA' => 'RNA',
+        'Invalid Number' => 'Invalid Number',
+        'Mailbox' => 'Mailbox',
+        'Busy' => 'Busy',
+    ];
+
     public function invoiceAgent():BelongsTo
     {
         return $this->belongsTo(InvoiceAgent::class);

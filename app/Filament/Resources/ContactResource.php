@@ -8,6 +8,7 @@ use App\Models\Contact;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -43,13 +44,18 @@ class ContactResource extends Resource
                     ->options(Contact::CALL_TYPE),
                 Forms\Components\Select::make('call_result')
                     ->required()
-                    ->options(Contact::CALL_RESULT),
-                Forms\Components\Textarea::make('detail')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
+                    ->options(Contact::CALL_RESULT)
+                    ->live(),
                 Forms\Components\Textarea::make('notes')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
+                    ->maxLength(65535),
+                Forms\Components\Select::make('detail')
+                    ->options(fn (Get $get): array => match ($get('call_result')) {
+                        Contact::CALL_RESULT_CONTACTED => Contact::CALL_RESPONSE_CONTACTED,
+                        Contact::CALL_RESULT_UNCONTACTED => Contact::CALL_RESPONSE_UNCONTACTED,
+                        default => [],
+                    })
+                    ->hidden(fn (Get $get): bool => !$get('call_result') || $get('call_result')==Contact::CALL_RESULT_DELIVERED),
+                
             ]);
     }
 
