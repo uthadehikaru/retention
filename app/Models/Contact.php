@@ -51,4 +51,9 @@ class Contact extends Model
     {
         return $this->belongsTo(InvoiceAgent::class);
     }
+
+    public function promo():BelongsTo
+    {
+        return $this->belongsTo(Promo::class);
+    }
 }

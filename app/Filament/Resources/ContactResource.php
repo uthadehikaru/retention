@@ -55,7 +55,9 @@ class ContactResource extends Resource
                         default => [],
                     })
                     ->hidden(fn (Get $get): bool => !$get('call_result') || $get('call_result')==Contact::CALL_RESULT_DELIVERED),
-                
+                Forms\Components\Select::make('promo_id')
+                    ->label('Promo')
+                    ->relationship(name: 'promo', titleAttribute: 'name'),
             ]);
     }
 
@@ -82,6 +84,8 @@ class ContactResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('call_result')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('promo.name')
+                    ->sortable(),
             ])
             ->filters([
                 //
