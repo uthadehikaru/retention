@@ -22,6 +22,8 @@ class AgentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
+    protected static ?string $navigationGroup = 'Data';
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

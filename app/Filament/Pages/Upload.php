@@ -20,6 +20,8 @@ class Upload extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
+    protected static ?string $navigationGroup = 'Admin';
+
     protected static string $view = 'filament.pages.upload';
 
     public static function shouldRegisterNavigation(): bool

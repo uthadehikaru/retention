@@ -19,6 +19,8 @@ class PromoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    protected static ?string $navigationGroup = 'Data';
+
     public static function form(Form $form): Form
     {
         return $form

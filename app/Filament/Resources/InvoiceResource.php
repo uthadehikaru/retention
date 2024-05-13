@@ -22,6 +22,8 @@ class InvoiceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
+    protected static ?string $navigationGroup = 'Data';
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
