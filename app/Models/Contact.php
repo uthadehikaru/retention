@@ -47,6 +47,24 @@ class Contact extends Model
         'Busy' => 'Busy',
     ];
 
+    public function scopeContacted($query)
+    {
+        return $query
+        ->where('call_result',self::CALL_RESULT_CONTACTED);
+    }
+
+    public function scopeUncontacted($query)
+    {
+        return $query
+        ->where('call_result',self::CALL_RESULT_CONTACTED);
+    }
+
+    public function scopePayPromise($query)
+    {
+        return $query
+        ->where('detail','Janji Bayar');
+    }
+
     public function invoiceAgent():BelongsTo
     {
         return $this->belongsTo(InvoiceAgent::class);

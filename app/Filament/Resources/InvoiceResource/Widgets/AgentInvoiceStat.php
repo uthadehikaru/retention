@@ -20,13 +20,15 @@ class AgentInvoiceStat extends BaseWidget
     protected function getStats(): array
     {
 
-        $invoices = InvoiceAgent::own()->count();
-        $contacted = InvoiceAgent::own()->today()->whereHas('contacts')->count();
-        $uncontacted = InvoiceAgent::own()->today()->whereDoesntHave('contacts')->count();
+        $invoices = InvoiceAgent::assigned()->whereDoesntHave('contacts')->count();
+        $contacted = InvoiceAgent::assigned()->today()->whereHas('contacts', fn($query)=> $query->contacted())->count();
+        $uncontacted = InvoiceAgent::assigned()->today()->whereHas('contacts', fn($query)=> $query->uncontacted())->count();
+        $payPromise = InvoiceAgent::assigned()->today()->whereHas('contacts', fn($query)=> $query->payPromise())->count();
         return [
-            Stat::make('Total Invoices', $invoices),
+            Stat::make('Lead Invoices', $invoices),
             Stat::make('Contacted Invoices', $contacted),
             Stat::make('Uncontacted Invoices', $uncontacted),
+            Stat::make('Pay Promise', $payPromise),
         ];
     }
 }

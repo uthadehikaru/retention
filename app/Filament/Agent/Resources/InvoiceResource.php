@@ -5,6 +5,7 @@ namespace App\Filament\Agent\Resources;
 use App\Filament\Agent\Resources\InvoiceResource\Pages;
 use App\Filament\Agent\Resources\InvoiceResource\RelationManagers;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -106,6 +107,10 @@ class InvoiceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->whereRelation('customer', 'agent_id', Auth::user()->agent?->id);
+        return parent::getEloquentQuery()->whereHas('agents', function($query){
+            $query->where('agents.id',Auth::user()->agent->id)
+            ->whereDate('start_date','<=',Carbon::now())
+            ->whereDate('end_date','>=',Carbon::now());
+        });
     }
 }

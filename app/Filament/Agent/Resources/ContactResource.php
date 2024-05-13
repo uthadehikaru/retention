@@ -5,8 +5,10 @@ namespace App\Filament\Agent\Resources;
 use App\Filament\Agent\Resources\ContactResource\Pages;
 use App\Filament\Agent\Resources\ContactResource\RelationManagers;
 use App\Models\Contact;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -30,23 +32,36 @@ class ContactResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('invoice_id')
-                    ->relationship('invoice', 'invoice_no')
+                Forms\Components\Select::make('invoice_agent_id')
+                    ->label('Invoice')
+                    ->relationship('invoiceAgent', 'invoices.invoice_no', function($query){
+                        $query->join('invoices','invoices.id','invoice_agents.invoice_id')
+                        ->where('agent_id',Auth::user()->agent->id)
+                        ->whereDate('start_date','<=',Carbon::now())
+                        ->whereDate('end_date','>=',Carbon::now());
+                    })
                     ->required(),
                 Forms\Components\DateTimePicker::make('call_time')
                     ->required(),
                 Forms\Components\Select::make('call_type')
-                    ->options(Contact::CALL_TYPE)
-                    ->required(),
+                    ->required()
+                    ->options(Contact::CALL_TYPE),
                 Forms\Components\Select::make('call_result')
-                ->options(Contact::CALL_RESULT)
-                    ->required(),
-                Forms\Components\Textarea::make('detail')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
+                    ->required()
+                    ->options(Contact::CALL_RESULT)
+                    ->live(),
                 Forms\Components\Textarea::make('notes')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
+                    ->maxLength(65535),
+                Forms\Components\Select::make('detail')
+                    ->options(fn (Get $get): array => match ($get('call_result')) {
+                        Contact::CALL_RESULT_CONTACTED => Contact::CALL_RESPONSE_CONTACTED,
+                        Contact::CALL_RESULT_UNCONTACTED => Contact::CALL_RESPONSE_UNCONTACTED,
+                        default => [],
+                    })
+                    ->hidden(fn (Get $get): bool => !$get('call_result') || $get('call_result')==Contact::CALL_RESULT_DELIVERED),
+                Forms\Components\Select::make('promo_id')
+                    ->label('Promo')
+                    ->relationship(name: 'promo', titleAttribute: 'name'),
             ]);
     }
 
@@ -57,7 +72,7 @@ class ContactResource extends Resource
                 Tables\Columns\TextColumn::make('call_time')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('invoice.invoice_no')
+                Tables\Columns\TextColumn::make('invoiceAgent.invoice.invoice_no')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -107,12 +122,8 @@ class ContactResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-        ->whereExists(function ($query) {
-            $query->select(DB::raw(1))
-                  ->from('invoices')
-                  ->join('customers','invoices.customer_id','customers.id')
-                  ->whereColumn('contacts.invoice_id', 'invoices.id')
-                  ->where('customers.agent_id', Auth::user()->agent?->id);
+        ->whereHas('invoiceAgent', function($query){
+            $query->assigned();
         })
         ;
     }

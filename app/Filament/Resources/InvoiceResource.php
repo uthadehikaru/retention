@@ -109,11 +109,7 @@ class InvoiceResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->modifyQueryUsing(function (Builder $query) {
-                if(Auth::user()->agent)
-                    $query->whereRelation('agents','agents.id',Auth::user()->agent->id);
-            });
+            ]);
     }
 
     public static function getRelations(): array

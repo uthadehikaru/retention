@@ -19,6 +19,14 @@ class InvoiceAgent extends Model
         ->whereAgentId(Auth::user()->agent?->id);
     }
 
+    public function scopeAssigned($query)
+    {
+        return $query
+        ->whereAgentId(Auth::user()->agent?->id)
+        ->whereDate('start_date','<=',Carbon::now())
+        ->whereDate('end_date','>=',Carbon::now());
+    }
+
     public function scopeToday($query)
     {
         return $query
